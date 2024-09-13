@@ -1,1 +1,1 @@
-This is an AI generated pplattofrm
+This is an AI generated plattform
