@@ -1,7 +1,9 @@
 const DashboardPage = () => {
   return (
     <>
-      <p>Dashboard page (protected)</p>
+      <div className=" flex flex-row justify-between">
+        <p>Dashboard page (protected)</p>
+      </div>
     </>
   );
 };
