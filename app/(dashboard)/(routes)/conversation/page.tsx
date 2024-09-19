@@ -103,10 +103,15 @@
 
 "use client";
 
+import { BotAvatar } from "@/components/customComponents/avatar/bot-avatar";
+import { UserAvatar } from "@/components/customComponents/avatar/user-avatar";
+import { Empty } from "@/components/customComponents/empty";
 import { Heading } from "@/components/customComponents/heading";
+import { Loader } from "@/components/customComponents/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { MessageSquare } from "lucide-react";
@@ -197,15 +202,29 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
+          {true && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader />
+            </div>
+          )}
+          {messages.length === 0 && !isLoading && (
+            <Empty label=" No conversation has started yet" />
+          )}
           <div className="flex flex-col-reverse gap-y-4">
-            {messages.map(
-              (
-                message,
-                index // Added `index` as key
-              ) => (
-                <div key={index}>{message.content}</div>
-              )
-            )}
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "p-8 w-full flex item-start gap-x-8 rounded-lg",
+                  message.role === "user"
+                    ? "bg-white border border-black/10"
+                    : "bg-muted "
+                )}
+              >
+                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                <p>{message.content}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

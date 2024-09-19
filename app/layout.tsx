@@ -18,7 +18,7 @@ import "./globals.css";
 //   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], // Include weights you want to use
 // });
 export const metadata: Metadata = {
-  title: "Genius",
+  title: "Alix",
   description: "AI generated plattform",
 };
 

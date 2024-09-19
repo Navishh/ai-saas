@@ -61,7 +61,7 @@ const DashboardPage = () => {
           Explore the power of AI
         </h2>
         <p className="text-muted-foreground font-light text-sm md:text-lg text-center">
-          Chat with the smartest AI - GENIUS v1.0
+          Chat with the smartest AI - ALIX v1.0
         </p>
       </div>
       <div className="px-4 md:px-20 lg:px-32 space-y-4">
