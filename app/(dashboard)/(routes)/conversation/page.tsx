@@ -103,8 +103,6 @@
 
 "use client";
 
-import { BotAvatar } from "@/components/customComponents/avatar/bot-avatar";
-import { UserAvatar } from "@/components/customComponents/avatar/user-avatar";
 import { Empty } from "@/components/customComponents/empty";
 import { Heading } from "@/components/customComponents/heading";
 import { Loader } from "@/components/customComponents/loader";
@@ -116,15 +114,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ChatCompletionMessage } from "openai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { formSchema } from "./constants";
 
+interface CustomChatCompletionMessage {
+  role: "user" | "system";
+  content: string;
+}
+
 const ConversationPage = () => {
   const router = useRouter();
-  const [messages, setMessages] = useState<ChatCompletionMessage[]>([]); // Corrected the type
+  const [messages, setMessages] = useState<CustomChatCompletionMessage[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -136,8 +138,7 @@ const ConversationPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: ChatCompletionMessage = {
-        // Corrected the type
+      const userMessage: CustomChatCompletionMessage = {
         role: "user",
         content: values.prompt,
       };
@@ -151,11 +152,11 @@ const ConversationPage = () => {
         ...current,
         userMessage,
         response.data.message,
-      ]); // Adjusted to response data structure
+      ]);
 
       form.reset();
     } catch (error) {
-      console.error(error); // Added error logging for better debugging
+      console.error(error);
     } finally {
       router.refresh();
     }
@@ -178,7 +179,7 @@ const ConversationPage = () => {
               className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
             >
               <FormField
-                name="prompt" // Corrected the name to match the form field name
+                name="prompt"
                 render={({ field }) => (
                   <FormItem className="col-span-12 lg:col-span-10">
                     <FormControl className="m-0 p-0">
@@ -202,7 +203,7 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
-          {true && (
+          {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
               <Loader />
             </div>
@@ -211,18 +212,29 @@ const ConversationPage = () => {
             <Empty label=" No conversation has started yet" />
           )}
           <div className="flex flex-col-reverse gap-y-4">
-            {messages.map((message, index) => (
+            {messages.map((message) => (
+              // <div
+              //   key={index}
+              //   className={cn(
+              //     "p-8 w-full flex item-start gap-x-8 rounded-lg",
+              //     message.role === "user"
+              //       ? "bg-white border border-black/10"
+              //       : "bg-muted "
+              //   )}
+              // >
+              //   {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+              //   <p>{message.content}</p>
+              // </div>
               <div
-                key={index}
+                key={message.content}
                 className={cn(
-                  "p-8 w-full flex item-start gap-x-8 rounded-lg",
+                  "p-8 w-full flex items-start gap-x-8 rounded-lg",
                   message.role === "user"
                     ? "bg-white border border-black/10"
                     : "bg-muted "
                 )}
               >
-                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p>{message.content}</p>
+                {message.content}
               </div>
             ))}
           </div>
