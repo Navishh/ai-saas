@@ -40,7 +40,6 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 
-// Define the expected structure of the Replicate API response
 interface ReplicateResponse {
   output: {
     audio: string;
