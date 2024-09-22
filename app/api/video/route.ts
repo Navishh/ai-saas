@@ -1,3 +1,4 @@
+import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
@@ -25,6 +26,12 @@ export async function POST(req: Request) {
 
     if (!prompt) {
       return new NextResponse("Prompt is required", { status: 400 });
+    }
+
+    const freeTrial = await checkApiLimit();
+
+    if (!freeTrial) {
+      return new NextResponse("Free trial is over.", { status: 403 });
     }
 
     const input = {
@@ -63,6 +70,8 @@ export async function POST(req: Request) {
     //   }
     // );
     console.log(response);
+
+    await increaseApiLimit();
 
     // Assert that the response is of type ReplicateResponse
     const typedResponse = response as ReplicateResponse;
