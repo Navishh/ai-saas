@@ -76,7 +76,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ audio: audioUrl });
   } catch (error) {
-    console.log("[MUSIC_ERROR]", error);
+    console.log("[VIDEO_ERROR]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
