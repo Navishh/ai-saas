@@ -1,3 +1,4 @@
+import { ModalProvider } from "@/components/customComponents/modal-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -40,7 +41,7 @@ export default function RootLayout({
           <SignedIn>
             <UserButton />
           </SignedIn> */}
-
+          <ModalProvider />
           {children}
         </body>
       </html>
