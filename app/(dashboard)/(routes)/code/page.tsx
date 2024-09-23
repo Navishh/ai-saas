@@ -6,9 +6,10 @@ import { Loader } from "@/components/customComponents/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useProModal } from "@/hooks/use-pro-modal";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Code } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,6 +25,7 @@ interface CustomChatCompletionMessage {
 
 const CodeGenerationPage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [messages, setMessages] = useState<CustomChatCompletionMessage[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,8 +55,21 @@ const CodeGenerationPage = () => {
       ]);
 
       form.reset();
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response?.status === 403) {
+          proModal.onOpen();
+        } else {
+          console.error(
+            "API error:",
+            axiosError.response?.data || axiosError.message
+          );
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
     } finally {
       router.refresh();
     }

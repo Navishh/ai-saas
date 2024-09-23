@@ -14,8 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useProModal } from "@/hooks/use-pro-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Download, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,7 @@ import { amountOptions, formSchema, resolutionOptions } from "./constants";
 
 const ImagePage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [images, setImages] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,8 +50,21 @@ const ImagePage = () => {
 
       setImages(urls);
       form.reset();
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response?.status === 403) {
+          proModal.onOpen();
+        } else {
+          console.error(
+            "API error:",
+            axiosError.response?.data || axiosError.message
+          );
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
     } finally {
       router.refresh();
     }
