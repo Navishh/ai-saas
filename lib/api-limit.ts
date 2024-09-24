@@ -50,25 +50,24 @@ export const checkApiLimit = async () => {
     return false;
   }
 };
-
 export const getApiLimitCount = async () => {
   const { userId } = auth();
-
   if (!userId) {
     return 0;
   }
 
-  const userApiLimit = await prismadb.userApiLimit.findUnique({
-    where: {
-      userId,
-    },
-  });
+  try {
+    const userApiLimit = await prismadb.userApiLimit.findUnique({
+      where: {
+        userId,
+      },
+    });
 
-  if (!userApiLimit) {
-    return 0;
+    return userApiLimit ? userApiLimit.count : 0;
+  } catch (error) {
+    console.error("Error fetching API limit count:", error);
+    return 0; // or handle the error as needed
   }
-
-  return userApiLimit.count;
 };
 
 // import UseAuth from "@clerk/nextjs";
