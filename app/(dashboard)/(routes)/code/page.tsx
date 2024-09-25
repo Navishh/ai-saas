@@ -14,6 +14,7 @@ import { Code } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import { z } from "zod";
 import { formSchema } from "./constants";
@@ -68,7 +69,7 @@ const CodeGenerationPage = () => {
           );
         }
       } else {
-        console.error("Unexpected error:", error);
+        toast.error("Unexpected error:");
       }
     } finally {
       router.refresh();

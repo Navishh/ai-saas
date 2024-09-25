@@ -1,4 +1,5 @@
 import { ModalProvider } from "@/components/customComponents/modal-provider";
+import { ToasterProvider } from "@/components/customComponents/toaster-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -42,6 +43,7 @@ export default function RootLayout({
             <UserButton />
           </SignedIn> */}
           <ModalProvider />
+          <ToasterProvider />
           {children}
         </body>
       </html>
