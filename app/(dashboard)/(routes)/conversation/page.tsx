@@ -14,6 +14,7 @@ import { MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as z from "zod";
 import { formSchema } from "./constants";
 
@@ -93,7 +94,7 @@ const ConversationPage = () => {
           );
         }
       } else {
-        console.error("Unexpected error:", error);
+        toast.error("Unexpected error:");
       }
     } finally {
       router.refresh();

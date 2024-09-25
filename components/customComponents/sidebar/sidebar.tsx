@@ -1,9 +1,5 @@
 "use client";
 
-interface SidebarProps {
-  apiLimitCount: number;
-}
-
 import { cn } from "@/lib/utils";
 import {
   Code,
@@ -70,7 +66,12 @@ const routes = [
   },
 ];
 
-const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
+interface SidebarProps {
+  apiLimitCount: number;
+  isPro: boolean;
+}
+
+const Sidebar = ({ apiLimitCount = 0 }: SidebarProps, isPro = false) => {
   const pathname = usePathname();
 
   return (
@@ -107,7 +108,7 @@ const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
           ))}
         </div>
       </div>
-      <FreeCounter apiLimitCount={apiLimitCount} />
+      <FreeCounter isPro={isPro} apiLimitCount={apiLimitCount} />
     </div>
   );
 };
