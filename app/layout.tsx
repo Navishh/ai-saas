@@ -1,3 +1,4 @@
+import { CrispProvider } from "@/components/customComponents/crisp/crisp-provider";
 import { ModalProvider } from "@/components/customComponents/modal-provider";
 import { ToasterProvider } from "@/components/customComponents/toaster-provider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -35,6 +36,7 @@ export default function RootLayout({
         {/* <body
           className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
         > */}
+        <CrispProvider />
         <body className={` antialiased`}>
           {/* <SignedOut>
             <SignInButton />
