@@ -29,7 +29,7 @@ export const FreeCounter = ({
   }
 
   if (isPro) {
-    return null;
+    return <FreeCounter isPro={false} apiLimitCount={apiLimitCount} />;
   }
 
   return (
